@@ -1,10 +1,10 @@
-// app/protected/player/page.tsx
+
 import { getSupabaseSession } from "@/utils/supabase/server";
 import SpotifyPlayer from "@/components/SpotifyPlayer";
 
 const PlayerPage = async () => {
   const session = await getSupabaseSession();
-  const accessToken = session?.provider_token; // Ensure this is the Spotify access token
+  const accessToken = session?.provider_token; 
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center ">

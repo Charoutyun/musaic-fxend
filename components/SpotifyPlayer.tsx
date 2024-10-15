@@ -83,30 +83,30 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         alert("Playback error occurred.");
       });
 
-      // Ready
+      
       spotifyPlayer.addListener("ready", ({ device_id }: { device_id: string }) => {
         console.log("Ready with Device ID", device_id);
         setDeviceId(device_id);
       });
 
-      // Not Ready
+      
       spotifyPlayer.addListener("not_ready", ({ device_id }: { device_id: string }) => {
         console.log("Device ID has gone offline", device_id);
       });
 
-      // Player state changed
+      
       spotifyPlayer.addListener("player_state_changed", (state: any) => {
         if (!state) return;
         setPlayerState(state);
-        setPosition(state.position); // Set the initial position
+        setPosition(state.position);
       });
 
-      // Connect to the player!
+      
       spotifyPlayer.connect();
       setPlayer(spotifyPlayer);
     };
 
-    // Cleanup on unmount
+    
     return () => {
       if (player) {
         player.disconnect();
@@ -114,7 +114,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     };
   }, [accessToken, isPremium]);
 
-  // Poll the player state every second to update the position
+  
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -125,10 +125,10 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
             setPosition(state.position);
           }
         });
-      }, 1000); // Update every second
+      }, 1000); 
     }
 
-    // Clear the interval when the player is paused or the component is unmounted
+    
     return () => clearInterval(interval);
   }, [playerState, player]);
 
@@ -147,7 +147,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
           "Content-Type": "application/json",
         },
         data: {
-          uris: ["spotify:track:3AJwUDP919kvQ9QcozQPxg"], // Replace with desired track URI
+          uris: ["spotify:track:3AJwUDP919kvQ9QcozQPxg"], 
         },
       });
     } catch (error) {
@@ -204,7 +204,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       await player.setVolume(newVolume[0] / 100);
       setVolume(newVolume[0]);
     } catch (error) {
-      console.error("Error changing volume:", error);
+      console.error("Error Volume", error);
     }
   };
 
