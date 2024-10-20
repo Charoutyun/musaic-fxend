@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import Slider from "@/components/ui/Slider";
 import { SkipBack, SkipForward, Play, Pause, Volume2, Search, X } from "lucide-react";
 import debounce from "lodash.debounce";
@@ -31,17 +31,29 @@ interface SearchResult {
   };
 }
 
-interface SpotifyApiErrorResponse {
-  error: {
-    status: number;
-    message: string;
+interface TrackWindow {
+  current_track: {
+    name: string;
+    artists: Array<{ name: string }>;
+    album: {
+      images: Array<{ url: string }>;
+    };
   };
+  previous_tracks: Array<any>;
+  next_tracks: Array<any>;
+}
+
+interface PlayerState {
+  paused: boolean;
+  position: number;
+  duration: number;
+  track_window: TrackWindow;
 }
 
 const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
-  const [playerState, setPlayerState] = useState<Spotify.PlaybackState | null>(null);
+  const [playerState, setPlayerState] = useState<PlayerState | null>(null);
   const [isPremium, setIsPremium] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(50);
   const [position, setPosition] = useState<number>(0);
@@ -83,11 +95,14 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
         setSearchResults(response.data);
       } catch (error: unknown) {
-        const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-        console.error("Error searching tracks:", axiosError.response?.data);
-        setSearchError(
-          axiosError.response?.data?.error?.message || "Failed to fetch search results."
-        );
+        if (axios.isAxiosError(error)) {
+          console.error("Error searching tracks:", error.response?.data);
+          setSearchError(
+            error.response?.data?.error?.message || "Failed to fetch search results."
+          );
+        } else {
+          console.error("Unexpected error:", error);
+        }
       } finally {
         setIsSearching(false);
       }
@@ -120,9 +135,13 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         } else {
           alert("You need a Spotify Premium account to use the Web Playback SDK.");
         }
-      } catch (error) {
-        console.error("Error checking Spotify account type:", error);
-        alert("Failed to verify Spotify account type.");
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error("Error checking Spotify account type:", error.response?.data);
+          alert("Failed to verify Spotify account type.");
+        } else {
+          console.error("Unexpected error:", error);
+        }
       }
     };
 
@@ -140,7 +159,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-      const spotifyPlayer = new Spotify.Player({
+      const spotifyPlayer = new window.Spotify.Player({
         name: "Next.js Spotify Player",
         getOAuthToken: (cb: (token: string) => void) => {
           cb(accessToken);
@@ -149,20 +168,20 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       });
 
       // Error handling
-      spotifyPlayer.addListener("initialization_error", (error: { message: string }) => {
-        console.error("Initialization Error:", error.message);
+      spotifyPlayer.addListener("initialization_error", ({ message }: { message: string }) => {
+        console.error("Initialization Error:", message);
         alert("Failed to initialize Spotify Player.");
       });
-      spotifyPlayer.addListener("authentication_error", (error: { message: string }) => {
-        console.error("Authentication Error:", error.message);
+      spotifyPlayer.addListener("authentication_error", ({ message }: { message: string }) => {
+        console.error("Authentication Error:", message);
         alert("Authentication failed. Please log in again.");
       });
-      spotifyPlayer.addListener("account_error", (error: { message: string }) => {
-        console.error("Account Error:", error.message);
+      spotifyPlayer.addListener("account_error", ({ message }: { message: string }) => {
+        console.error("Account Error:", message);
         alert("There was an issue with your Spotify account.");
       });
-      spotifyPlayer.addListener("playback_error", (error: { message: string }) => {
-        console.error("Playback Error:", error.message);
+      spotifyPlayer.addListener("playback_error", ({ message }: { message: string }) => {
+        console.error("Playback Error:", message);
         alert("Playback error occurred.");
       });
 
@@ -178,7 +197,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       });
 
       // Player state changed
-      spotifyPlayer.addListener("player_state_changed", (state: Spotify.PlaybackState | null) => {
+      spotifyPlayer.addListener("player_state_changed", (state: PlayerState | null) => {
         if (!state) return;
         setPlayerState(state);
         setPosition(state.position);
@@ -195,7 +214,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         player.disconnect();
       }
     };
-  }, [accessToken, isPremium, player]);
+  }, [accessToken, isPremium]);
 
   // Update position periodically when playing
   useEffect(() => {
@@ -203,7 +222,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
     if (playerState && !playerState.paused) {
       interval = setInterval(() => {
-        player?.getCurrentState().then((state: Spotify.PlaybackState | null) => {
+        player?.getCurrentState().then((state: PlayerState | null) => {
           if (state) {
             setPosition(state.position);
           }
@@ -236,13 +255,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         },
       });
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error starting playback:", axiosError.response?.data);
-      alert(
-        `Failed to start playback: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error starting playback:", error.response?.data);
+        alert(`Failed to start playback: ${error.response?.data?.error?.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -255,13 +273,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     try {
       await player.togglePlay();
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error toggling play:", axiosError.response?.data);
-      alert(
-        `Failed to toggle playback: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error toggling play:", error.response?.data);
+        alert(`Failed to toggle playback: ${error.response?.data?.error?.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -274,13 +291,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     try {
       await player.nextTrack();
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error skipping to next track:", axiosError.response?.data);
-      alert(
-        `Failed to skip to next track: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error skipping to next track:", error.response?.data);
+        alert(`Failed to skip to next track: ${error.response?.data?.error?.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -293,13 +309,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     try {
       await player.previousTrack();
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error skipping to previous track:", axiosError.response?.data);
-      alert(
-        `Failed to skip to previous track: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error skipping to previous track:", error.response?.data);
+        alert(`Failed to skip to previous track: ${error.response?.data?.error?.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -313,13 +328,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       await player.setVolume(newVolume[0] / 100);
       setVolume(newVolume[0]);
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error changing volume:", axiosError.response?.data);
-      alert(
-        `Failed to change volume: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error changing volume:", error.response?.data);
+        alert(`Failed to change volume: ${error.response?.data?.error?.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -327,7 +341,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     const seconds = Math.floor(ms / 1000);
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
   // Handle playing a selected track from search results
@@ -352,16 +366,15 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       });
       // Collapse the search bar and reset search state
       setIsSearchCollapsed(true);
-      setSearchQuery("");
+      setSearchQuery('');
       setSearchResults(null);
     } catch (error: unknown) {
-      const axiosError = error as AxiosError<SpotifyApiErrorResponse>;
-      console.error("Error playing selected track:", axiosError.response?.data);
-      alert(
-        `Failed to play track: ${
-          axiosError.response?.data?.error?.message || "Unknown error"
-        }`
-      );
+      if (axios.isAxiosError(error)) {
+        console.error("Error playing selected track:", error.response?.data);
+        alert(`Failed to play track: ${error.response?.data.error.message || 'Unknown error'}`);
+      } else {
+        console.error("Unexpected error:", error);
+      }
     }
   };
 
@@ -448,21 +461,21 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
         <img
           src={
-            playerState?.track_window?.current_track?.album?.images[0]?.url ||
+            playerState?.track_window.current_track?.album?.images[0]?.url ||
             "/placeholder.svg?height=300&width=300"
           }
           alt={`${
-            playerState?.track_window?.current_track?.name || "Album"
+            playerState?.track_window.current_track?.name || "Album"
           } cover`}
           className="w-64 h-64 rounded-md shadow-lg"
         />
         <div className="flex-1 w-full max-w-xl">
           <div className="mb-6">
             <h2 className="text-3xl font-bold mb-2">
-              {playerState?.track_window?.current_track?.name || "No track playing"}
+              {playerState?.track_window.current_track.name || "No track playing"}
             </h2>
             <p className="text-xl text-gray-400">
-              {playerState?.track_window?.current_track?.artists
+              {playerState?.track_window.current_track.artists
                 ?.map((artist) => artist.name)
                 .join(", ") || "Unknown artist"}
             </p>
