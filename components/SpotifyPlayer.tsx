@@ -31,29 +31,10 @@ interface SearchResult {
   };
 }
 
-interface TrackWindow {
-  current_track: {
-    name: string;
-    artists: Array<{ name: string }>;
-    album: {
-      images: Array<{ url: string }>;
-    };
-  };
-  previous_tracks: Array<any>;
-  next_tracks: Array<any>;
-}
-
-interface PlayerState {
-  paused: boolean;
-  position: number;
-  duration: number;
-  track_window: TrackWindow;
-}
-
 const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
-  const [playerState, setPlayerState] = useState<PlayerState | null>(null);
+  const [playerState, setPlayerState] = useState<Spotify.PlaybackState | null>(null);
   const [isPremium, setIsPremium] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(50);
   const [position, setPosition] = useState<number>(0);
@@ -197,7 +178,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       });
 
       // Player state changed
-      spotifyPlayer.addListener("player_state_changed", (state: PlayerState | null) => {
+      spotifyPlayer.addListener("player_state_changed", (state: Spotify.PlaybackState | null) => {
         if (!state) return;
         setPlayerState(state);
         setPosition(state.position);
@@ -222,7 +203,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
     if (playerState && !playerState.paused) {
       interval = setInterval(() => {
-        player?.getCurrentState().then((state: PlayerState | null) => {
+        player?.getCurrentState().then((state: Spotify.PlaybackState | null) => {
           if (state) {
             setPosition(state.position);
           }
@@ -460,13 +441,8 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
         <img
-          src={
-            playerState?.track_window.current_track?.album?.images[0]?.url ||
-            "/placeholder.svg?height=300&width=300"
-          }
-          alt={`${
-            playerState?.track_window.current_track?.name || "Album"
-          } cover`}
+          src={playerState?.track_window.current_track?.album?.images[0]?.url || "/placeholder.svg?height=300&width=300"}
+          alt={`${playerState?.track_window.current_track?.name || "Album"} cover`}
           className="w-64 h-64 rounded-md shadow-lg"
         />
         <div className="flex-1 w-full max-w-xl">
@@ -475,9 +451,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
               {playerState?.track_window.current_track.name || "No track playing"}
             </h2>
             <p className="text-xl text-gray-400">
-              {playerState?.track_window.current_track.artists
-                ?.map((artist) => artist.name)
-                .join(", ") || "Unknown artist"}
+              {playerState?.track_window.current_track.artists?.map((artist) => artist.name).join(", ") || "Unknown artist"}
             </p>
           </div>
 
