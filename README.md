@@ -2,7 +2,6 @@
 
 Musaic is an intelligent music recommendation web app built for a Senior Capstone Project at CSU Fullerton. It is authored by:
 
-- Ethan Lew
 - Baraa Damer
 - Harout Chamelian
 - Manasi Patil
