@@ -14,6 +14,7 @@ interface SpotifyPlayerProps {
 declare global {
   interface Window {
     onSpotifyWebPlaybackSDKReady: () => void;
+    Spotify: typeof Spotify;
   }
 }
 
@@ -45,6 +46,12 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(false);
+
+  // ChatGPT Interaction States
+  const [chatInput, setChatInput] = useState<string>("");
+  const [chatResponse, setChatResponse] = useState<string>("");
+  const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
+  const [chatError, setChatError] = useState<string | null>(null);
 
   // Debounced Search Function
   const debouncedSearch = useCallback(
@@ -134,12 +141,20 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   useEffect(() => {
     if (!accessToken || !isPremium) return;
 
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
-    document.body.appendChild(script);
+    if (!window.Spotify) {
+      const script = document.createElement("script");
+      script.src = "https://sdk.scdn.co/spotify-player.js";
+      script.async = true;
+      document.body.appendChild(script);
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
+      script.onload = () => {
+        initializePlayer();
+      };
+    } else {
+      initializePlayer();
+    }
+
+    function initializePlayer() {
       const spotifyPlayer = new window.Spotify.Player({
         name: "Next.js Spotify Player",
         getOAuthToken: (cb: (token: string) => void) => {
@@ -187,7 +202,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
       // Connect to the player!
       spotifyPlayer.connect();
       setPlayer(spotifyPlayer);
-    };
+    }
 
     // Cleanup on unmount
     return () => {
@@ -359,8 +374,67 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     }
   };
 
+  // ChatGPT Interaction Functions
+  const handleChatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) {
+      return;
+    }
+
+    setIsChatLoading(true);
+    setChatError(null);
+
+    try {
+      const response = await axios.post("/api/chat", {
+        prompt: chatInput.trim(),
+      });
+
+      setChatResponse(response.data.reply);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error fetching chat response:", error.response?.data);
+        setChatError(
+          error.response?.data?.error?.message || "Failed to fetch response."
+        );
+      } else {
+        console.error("Unexpected error:", error);
+        setChatError("An unexpected error occurred.");
+      }
+    } finally {
+      setIsChatLoading(false);
+    }
+  };
+
   return (
     <div className="bg-black text-white p-8 rounded-lg max-w-6xl w-full mx-auto">
+      {/* ChatGPT Interaction Section */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold mb-4">Ask for Song Recommendations</h2>
+        <form onSubmit={handleChatSubmit} className="flex flex-col space-y-4">
+          <textarea
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            placeholder="Ask ChatGPT for song recommendations..."
+            className="w-full bg-gray-800 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            rows={4}
+          ></textarea>
+          <button
+            type="submit"
+            disabled={isChatLoading}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+          >
+            {isChatLoading ? "Loading..." : "Get Recommendations"}
+          </button>
+        </form>
+        {chatError && <p className="text-red-500 mt-2">{chatError}</p>}
+        {chatResponse && (
+          <div className="mt-4 bg-gray-800 p-4 rounded">
+            <h3 className="text-xl font-semibold mb-2">ChatGPT Response:</h3>
+            <p>{chatResponse}</p>
+          </div>
+        )}
+      </div>
+
       {/* Toggle Search Bar Button */}
       <div className="flex justify-end mb-4">
         <button onClick={toggleSearchBar} className="text-gray-400 hover:text-white">
