@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
@@ -31,11 +31,15 @@ export async function POST(req: NextRequest) {
     const assistantMessage = response.data.choices[0].message.content;
 
     return NextResponse.json({ reply: assistantMessage });
-  } catch (error: any) {
-    console.error(
-      'Error fetching ChatGPT response:',
-      error.response?.data || error.message
-    );
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(
+        'Error fetching ChatGPT response:',
+        error.response?.data || error.message
+      );
+    } else {
+      console.error('Unexpected error:', error);
+    }
     return NextResponse.json(
       { error: 'Failed to fetch response from ChatGPT.' },
       { status: 500 }
