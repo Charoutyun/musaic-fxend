@@ -6,16 +6,13 @@ import Link from "next/link";
 import "./globals.css";
 import { Headphones } from "lucide-react";
 
-const defaultUrl = process.env.VERCEL_URL
-	? `https://${process.env.VERCEL_URL}`
-	: "http://localhost:3000";
+const defaultUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const metadata = {
-	metadataBase: new URL(defaultUrl),
-	title: "Musiac",
-	description: "An intelligent music recommendation system",
+  metadataBase: new URL(defaultUrl),
+  title: "Musaic",
+  description: "An intelligent music recommendation system",
 };
-
 export default function RootLayout({
 	children,
 }: {
