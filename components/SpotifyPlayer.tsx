@@ -139,78 +139,78 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   }, [accessToken]);
 
   useEffect(() => {
-    if (!accessToken || !isPremium) return;
-
+    // Define onSpotifyWebPlaybackSDKReady on the window to initialize the player
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      initializePlayer();
+    };
+  
+    // Load the Spotify Web Playback SDK script if not already loaded
     if (!window.Spotify) {
       const script = document.createElement("script");
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
-      document.body.appendChild(script);
-
+  
+      // Initialize the player after the SDK script loads
       script.onload = () => {
-        initializePlayer();
+        if (window.Spotify && window.onSpotifyWebPlaybackSDKReady) {
+          window.onSpotifyWebPlaybackSDKReady();
+        }
       };
+  
+      document.body.appendChild(script);
     } else {
+      // Initialize the player directly if Spotify SDK is already available
       initializePlayer();
     }
-
+  
+    // Function to initialize the Spotify Player
     function initializePlayer() {
       const spotifyPlayer = new window.Spotify.Player({
         name: "Next.js Spotify Player",
-        getOAuthToken: (cb: (token: string) => void) => {
-          cb(accessToken);
-        },
+        getOAuthToken: (cb) => cb(accessToken),
         volume: 0.5,
       });
-
-      // Error handling
-      spotifyPlayer.addListener("initialization_error", ({ message }: { message: string }) => {
-        console.error("Initialization Error:", message);
-        alert("Failed to initialize Spotify Player.");
-      });
-      spotifyPlayer.addListener("authentication_error", ({ message }: { message: string }) => {
-        console.error("Authentication Error:", message);
-        alert("Authentication failed. Please log in again.");
-      });
-      spotifyPlayer.addListener("account_error", ({ message }: { message: string }) => {
-        console.error("Account Error:", message);
-        alert("There was an issue with your Spotify account.");
-      });
-      spotifyPlayer.addListener("playback_error", ({ message }: { message: string }) => {
-        console.error("Playback Error:", message);
-        alert("Playback error occurred.");
-      });
-
-      // Ready
-      spotifyPlayer.addListener("ready", ({ device_id }: { device_id: string }) => {
+  
+      spotifyPlayer.addListener("ready", ({ device_id }) => {
         console.log("Ready with Device ID", device_id);
         setDeviceId(device_id);
       });
-
-      // Not Ready
-      spotifyPlayer.addListener("not_ready", ({ device_id }: { device_id: string }) => {
-        console.log("Device ID has gone offline", device_id);
+  
+      spotifyPlayer.addListener("initialization_error", ({ message }) => {
+        console.error("Initialization Error:", message);
+        alert("Failed to initialize Spotify Player.");
       });
-
-      // Player state changed
-      spotifyPlayer.addListener("player_state_changed", (state: Spotify.PlaybackState | null) => {
+      spotifyPlayer.addListener("authentication_error", ({ message }) => {
+        console.error("Authentication Error:", message);
+        alert("Authentication failed. Please log in again.");
+      });
+      spotifyPlayer.addListener("account_error", ({ message }) => {
+        console.error("Account Error:", message);
+        alert("There was an issue with your Spotify account.");
+      });
+      spotifyPlayer.addListener("playback_error", ({ message }) => {
+        console.error("Playback Error:", message);
+        alert("Playback error occurred.");
+      });
+  
+      // Add player state change listener
+      spotifyPlayer.addListener("player_state_changed", (state) => {
         if (!state) return;
         setPlayerState(state);
         setPosition(state.position);
       });
-
-      // Connect to the player!
+  
       spotifyPlayer.connect();
       setPlayer(spotifyPlayer);
     }
-
-    // Cleanup on unmount
+  
+    // Cleanup the player on component unmount
     return () => {
       if (player) {
         player.disconnect();
       }
     };
-  }, [accessToken, isPremium]);
+  }, [accessToken, isPremium, player]);
 
   // Update position periodically when playing
   useEffect(() => {
