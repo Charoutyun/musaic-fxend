@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
 import { redirect } from "next/navigation";
 import EnterButton from "@/components/EnterButton";
 import './page.css'; 
