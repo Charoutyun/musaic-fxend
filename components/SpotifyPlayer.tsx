@@ -515,7 +515,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
         <img
-          src={playerState?.track_window.current_track?.album?.images[0]?.url || "/placeholder.svg?height=300&width=300"}
+          src={playerState?.track_window.current_track?.album?.images[0]?.url || "/musaic.png"}
           alt={`${playerState?.track_window.current_track?.name || "Album"} cover`}
           className="w-64 h-64 rounded-md shadow-lg"
         />
