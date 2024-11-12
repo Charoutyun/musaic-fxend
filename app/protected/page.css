@@ -1,62 +1,9 @@
 /*STYLING FOR /protected/page.tsx/*/
 
-.page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.main-content {
-  max-width: 1200px;
-  width: 100%;
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-/* MOASIAC TILES */
-/* Positioning and Size */
-.side-tiles {
-  display: grid;
-  grid-template-rows: repeat(10, 50px); 
-  gap: 4px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  padding: 10px;
-}
-
-.side-tiles.left {
-  left: 0;
-}
-
-.side-tiles.right {
-  right: 0;
-}
-
-/* Design and Looks of Tile */
-.tile {
-  width: 50px;
-  height: 50px;
-  background-color: hsl(calc(360 * var(--i) / 10), 60%, 85%);
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.tile:hover {
-  background-color: hsl(calc(360 * var(--i) / 10), 60%, 75%);
-}
-
 /* AUTHENTICATION NOTIFYING */
 .auth-card {
-  padding: 2rem 3rem;
+  padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 100%;
   max-width: 400px;
@@ -66,7 +13,7 @@
 
 .auth-head {
   font-size: 1.8rem;
-  color: #333;
+  color: #ebebeb;
   margin-bottom: 1rem;
 }
 
