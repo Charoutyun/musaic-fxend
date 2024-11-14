@@ -14,24 +14,16 @@ export default async function ProtectedPage() {
         return redirect("/sign-in");
     }
 
-    //Div elements and UI of /protected/
-    return (
-        <div className="page-container">
-            {/* Left mosaic */}
-
-
-            {/* Authentication */}
-            <div className="auth-card">
-                <h1 className="auth-head">Welcome, {user.email}!</h1>
-                <p className="auth-msg">Your account has been successfully authenticated.</p>
-                <p className="auth-click">
-                    Click below to access the music player and chatroom.
-                </p>
-                <EnterButton /> 
-            </div>
-
-            {/* Right mosaic */}
-
-        </div>
-    );
+	//Div elements and UI of /protected/
+	return (
+			<div className="auth-card">
+				<h1 className="auth-head">Welcome,</h1>
+				<h1 className="auth-head">{user.email}!</h1>
+				<p className="auth-msg">Your account has been successfully authenticated.</p>
+				<p className="auth-click">
+					Click below to access the music player and chatroom.
+				</p>
+				<EnterButton /> 
+			</div>
+	);
 }

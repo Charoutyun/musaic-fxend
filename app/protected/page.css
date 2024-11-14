@@ -1,98 +1,45 @@
 /*STYLING FOR /protected/page.tsx/*/
 
-.page-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .main-content {
-    max-width: 1200px;
-    width: 100%;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  /* MOASIAC TILES */
-  /* Positioning and Size */
-  .side-tiles {
-    display: grid;
-    grid-template-rows: repeat(10, 50px); 
-    gap: 4px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    padding: 10px;
-  }
-  
-  .side-tiles.left {
-    left: 0;
-  }
-  
-  .side-tiles.right {
-    right: 0;
-  }
-  
-  /* Design and Looks of Tile */
-  .tile {
-    width: 50px;
-    height: 50px;
-    background-color: hsl(calc(360 * var(--i) / 10), 60%, 85%);
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .tile:hover {
-    background-color: hsl(calc(360 * var(--i) / 10), 60%, 75%);
-  }
-  
-  /* AUTHENTICATION NOTIFYING */
-  .auth-card {
-    padding: 2rem 3rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    z-index: 1; /* stays on top of mosaics */
-  }
-  
-  .auth-head {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 1rem;
-  }
-  
-  .auth-msg {
-    font-size: 1rem;
-    color: #e5ffe7;
-    margin-bottom: 0.5rem;
-  }
-  
-  .auth-click {
-    font-size: 0.9rem;
-    color: #e5ffe7;
-    margin-bottom: 1.5rem;
-  }
-  
-  .auth-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #51ca0b;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .auth-button:hover {
-    background-color: #5fda18;
-  }
+/* AUTHENTICATION NOTIFYING */
+.auth-card {
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  z-index: 1; /* stays on top of mosaics */
+}
+
+.auth-head {
+  font-size: 1.8rem;
+  color: #ebebeb;
+  margin-bottom: 1rem;
+}
+
+.auth-msg {
+  font-size: 1rem;
+  color: #e5ffe7;
+  margin-bottom: 0.5rem;
+}
+
+.auth-click {
+  font-size: 0.9rem;
+  color: #e5ffe7;
+  margin-bottom: 1.5rem;
+}
+
+.auth-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #51ca0b;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #5fda18;
+}
