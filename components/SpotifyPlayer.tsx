@@ -40,20 +40,20 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   const [volume, setVolume] = useState<number>(50);
   const [position, setPosition] = useState<number>(0);
 
-  // Search States
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [isSearchCollapsed, setIsSearchCollapsed] = useState(false);
 
-  // ChatGPT Interaction States
+  
   const [chatInput, setChatInput] = useState<string>("");
   const [chatResponse, setChatResponse] = useState<string>("");
   const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
   const [chatError, setChatError] = useState<string | null>(null);
 
-  // Debounced Search Function
+  
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
       if (query.trim() === "") {
@@ -98,7 +98,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     [accessToken]
   );
 
-  // Handle Search Input Change
+ 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -181,30 +181,30 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         alert("Playback error occurred.");
       });
 
-      // Ready
+    
       spotifyPlayer.addListener("ready", ({ device_id }: { device_id: string }) => {
         console.log("Ready with Device ID", device_id);
         setDeviceId(device_id);
       });
 
-      // Not Ready
+      
       spotifyPlayer.addListener("not_ready", ({ device_id }: { device_id: string }) => {
         console.log("Device ID has gone offline", device_id);
       });
 
-      // Player state changed
+     
       spotifyPlayer.addListener("player_state_changed", (state: Spotify.PlaybackState | null) => {
         if (!state) return;
         setPlayerState(state);
         setPosition(state.position);
       });
 
-      // Connect to the player!
+     
       spotifyPlayer.connect();
       setPlayer(spotifyPlayer);
     }
 
-    // Cleanup on unmount
+    
     return () => {
       if (player) {
         player.disconnect();
@@ -212,7 +212,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     };
   }, [accessToken, isPremium]);
 
-  // Update position periodically when playing
+  
   useEffect(() => {
     let interval: NodeJS.Timeout;
 
@@ -223,14 +223,14 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
             setPosition(state.position);
           }
         });
-      }, 1000); // Update every second
+      }, 1000); 
     }
 
-    // Cleanup
+  
     return () => clearInterval(interval);
   }, [playerState, player]);
 
-  // Playback Controls
+  
   const play = async () => {
     if (!deviceId) {
       console.error("No device ID available.");
@@ -247,7 +247,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
           "Content-Type": "application/json",
         },
         data: {
-          uris: ["spotify:track:3AJwUDP919kvQ9QcozQPxg"], // Replace with desired track URI
+          uris: ["spotify:track:3AJwUDP919kvQ9QcozQPxg"],
         },
       });
     } catch (error: unknown) {
@@ -340,7 +340,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  // Handle playing a selected track from search results
+  
   const handlePlayTrack = async (trackUri: string) => {
     if (!deviceId) {
       console.error("No device ID available.");
@@ -374,7 +374,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     }
   };
 
-  // ChatGPT Interaction Functions
+
   const handleChatSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim()) {
