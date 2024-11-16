@@ -4,15 +4,17 @@ import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
-import { Headphones } from "lucide-react";
+import Image from "next/image";
+import Musaic from "/public/musaic.png"; // Adjust path if necessary
 
 const defaultUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Musaic",
-  description: "An intelligent music recommendation system",
+	metadataBase: new URL(defaultUrl),
+	title: "Musaic",
+	description: "An intelligent music recommendation system",
 };
+
 export default function RootLayout({
 	children,
 }: {
@@ -32,10 +34,14 @@ export default function RootLayout({
 							<div className="w-full flex justify-center border-b border-b-foreground/10 h-16">
 								<header className="w-full max-w-5xl px-4 lg:px-6 h-14 flex items-center justify-between">
 									<Link
-										className="flex flex-row items-center space-x-2 font-semibold"
+										className="flex flex-row items-center space-x-1 font-semibold"
 										href="/"
 									>
-										<Headphones className="h-6 w-6" />
+										<Image
+											src={Musaic}
+											alt="Musaic Logo"
+											className="h-9 w-9"
+										/>
 										<span className="align-middle text-2xl">Musaic</span>
 									</Link>
 									<nav className="ml-auto flex gap-4 sm:gap-6 float-end">
