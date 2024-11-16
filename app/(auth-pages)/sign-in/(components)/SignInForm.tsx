@@ -15,37 +15,47 @@ export const LogInForm = ({ searchParams }: { searchParams: Message }) => {
 			<HashToSearch />
 			<div className="flex flex-col gap-2 min-w-72 max-w-72">
 				<form className="flex-1 flex flex-col min-w-64 space-y-2.5">
-					<h1>Sign in</h1>
-					<small>
-						Don't have an account?{" "}
-						<Link
-							className="text-foreground font-medium underline"
-							href="/sign-up"
-						>
-							Sign up
-						</Link>
-					</small>
+					<h1 className="text-center">Sign in</h1>
 					<div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-						<Label htmlFor="email">Email</Label>
-						<Input name="email" placeholder="hello@example.com" required />
+						<Label
+							htmlFor="email">
+						</Label>
+						<Input
+							name="email"
+							placeholder="Email"
+							required
+						/>
 						<div className="flex justify-between items-center">
-							<Label htmlFor="password">Password</Label>
-							<Link
-								className="text-xs text-foreground underline"
-								href="/forgot-password"
-							>
-								Forgot Password?
-							</Link>
+							<Label 
+							htmlFor="password">
+							</Label>
 						</div>
 						<Input
 							type="password"
 							name="password"
-							placeholder="Your password"
+							placeholder="Password"
 							required
 						/>
-						<SubmitButton pendingText="Signing In..." formAction={signInAction}>
+
+						<Link
+							className="text-xs text-foreground underline"
+							href="/forgot-password"
+						>
+							Forgot Password?
+						</Link>
+
+						<SubmitButton pendingText="Signing In..." formAction={signInAction} >
 							Sign in
 						</SubmitButton>
+						<small>
+							Don't have an account?{" "}
+							<Link
+								className="text-primary font-medium underline"
+								href="/sign-up"
+							>
+								Sign up
+							</Link>
+						</small>
 						<FormMessage message={searchParams} />
 					</div>
 				</form>
