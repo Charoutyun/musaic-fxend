@@ -42,21 +42,9 @@ export default function RootLayout({
 											alt="Musaic Logo"
 											className="h-9 w-9"
 										/>
-										<span className="align-middle text-2xl">Musaic</span>
+										<span className="align-middle text-2xl">MusAIc</span>
 									</Link>
 									<nav className="ml-auto flex gap-4 sm:gap-6 float-end">
-										<Link
-											className="text-sm font-medium hover:underline underline-offset-4"
-											href="#"
-										>
-											Features
-										</Link>
-										<Link
-											className="text-sm font-medium hover:underline underline-offset-4"
-											href="#"
-										>
-											About
-										</Link>
 									</nav>
 
 									<div className="ml-4">

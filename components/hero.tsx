@@ -1,20 +1,11 @@
-import Link from "next/link";
 import { Music, Radio, User } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
+import { OAuthButtons } from "@/app/(components)/OAuthButtons";
 
 export default function Header() {
 	return (
 		<>
 			<div className="flex flex-col min-h-screen">
 				<main className="flex-1">
-					<div className="h-96 max-h-96 bg-slate-100 p-8 rounded-md shadow-md w-fit mx-auto border-2">
-						{/* eslint-disable-next-line @next/next/no-img-element */}
-						<img
-							src="/musaic.png"
-							alt="Musaic logo"
-							className="obejct-contain w-auto h-full mx-auto"
-						/>
-					</div>
 					<section className="w-full py-12 md:py-12 lg:py-24 xl:py-32">
 						<div className="container px-4 md:px-6">
 							<div className="flex flex-col items-center space-y-4 text-center">
@@ -23,23 +14,12 @@ export default function Header() {
 										Discover Your Perfect Sound
 									</h1>
 									<p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-										Musaic uses AI to understand your taste and introduce you to
+										MusAIc uses AI to understand your taste and introduce you to
 										new artists and tracks you'll love.
 									</p>
 								</div>
 								<div className="space-x-4">
-									<Link
-										href="/sign-up"
-										className={buttonVariants({ variant: "default" })}
-									>
-										Get Started
-									</Link>
-									<Link
-										href="#"
-										className={buttonVariants({ variant: "outline" })}
-									>
-										Learn More
-									</Link>
+									<OAuthButtons actionType="signIn" />
 								</div>
 							</div>
 						</div>
