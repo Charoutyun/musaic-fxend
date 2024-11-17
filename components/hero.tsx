@@ -14,8 +14,7 @@ export default function Header() {
 										Discover Your Perfect Sound
 									</h1>
 									<p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-										MusAIc uses AI to understand your taste and introduce you to
-										new artists and tracks you'll love.
+									MusAIc utilizes AI to figure out what you like and helps you discover fresh artists and songs you’re bound to enjoy.
 									</p>
 								</div>
 								<div className="space-x-4">
@@ -50,7 +49,7 @@ export default function Header() {
 									<Radio className="h-12 w-12 text-primary" />
 									<h3 className="text-xl font-bold">Intelligent</h3>
 									<p className="text-sm text-gray-500 dark:text-gray-400">
-										Artificial Intelligence is used to suggest songs based on listening history or written descriptions.
+										AI is used to suggest songs based on listening history or written descriptions.
 									</p>
 								</div>
 							</div>

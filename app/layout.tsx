@@ -70,6 +70,8 @@ export default function RootLayout({
 								</p>
 								<ThemeSwitcher />
 							</footer>
+							<footer>We are not related to Spotify AB or any of it´s partners in any way.</footer>
+							<footer>© 2024 - Harout, Mar, Baraa, Manasi</footer>
 						</div>
 					</main>
 				</ThemeProvider>
