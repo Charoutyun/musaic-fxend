@@ -163,7 +163,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         volume: 0.5,
       });
 
-      // Error handling
+      
       spotifyPlayer.addListener("initialization_error", ({ message }: { message: string }) => {
         console.error("Initialization Error:", message);
         alert("Failed to initialize Spotify Player.");
@@ -360,7 +360,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
           uris: [trackUri],
         },
       });
-      // Collapse the search bar and reset search state
+      
       setIsSearchCollapsed(true);
       setSearchQuery('');
       setSearchResults(null);
@@ -407,7 +407,6 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
 
   return (
     <div className="bg-black text-white p-8 rounded-lg max-w-6xl w-full mx-auto">
-      {/* ChatGPT Interaction Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Ask for Song Recommendations</h2>
         <form onSubmit={handleChatSubmit} className="flex flex-col space-y-4">
@@ -435,14 +434,14 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         )}
       </div>
 
-      {/* Toggle Search Bar Button */}
+      
       <div className="flex justify-end mb-4">
         <button onClick={toggleSearchBar} className="text-gray-400 hover:text-white">
           {isSearchCollapsed ? <Search size={24} /> : <X size={24} />}
         </button>
       </div>
 
-      {/* Search Bar and Results */}
+  
       {!isSearchCollapsed && (
         <>
           {/* Search Bar */}
@@ -457,7 +456,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
             />
           </div>
 
-          {/* Search Results */}
+
           {isSearching && (
             <div className="flex items-center space-x-2">
               <svg
@@ -529,7 +528,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
             </p>
           </div>
 
-          {/* Track Progress Slider */}
+        
           <div className="mb-8">
             <Slider
               value={[position || 0]}
@@ -544,7 +543,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
             </div>
           </div>
 
-          {/* Playback Controls */}
+         
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-6">
               <button
@@ -587,7 +586,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         </div>
       </div>
 
-      {/* Start Playback Button if No Track is Playing */}
+  
       {!playerState && (
         <div className="mt-4">
           <p>No track is currently playing.</p>
