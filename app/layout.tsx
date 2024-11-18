@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className={GeistSans.className} suppressHydrationWarning>
-			<body className="bg-background text-foreground">
+			<body className="bg-gradient-to-b from-black via-[#1ED760] to-black text-foreground">
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
@@ -31,6 +31,7 @@ export default function RootLayout({
 				>
 					<main className="min-h-screen flex flex-col items-center">
 						<div className="flex-1 w-full flex flex-col gap-20 items-center">
+							{/* Header Section */}
 							<div className="w-full flex justify-center border-b border-b-foreground/10 h-16">
 								<header className="w-full max-w-5xl px-4 lg:px-6 h-14 flex items-center justify-between">
 									<Link
@@ -42,20 +43,24 @@ export default function RootLayout({
 											alt="Musaic Logo"
 											className="h-9 w-9"
 										/>
-										<span className="align-middle text-2xl">MusAIc</span>
+										<span className="align-middle text-2xl text-white [text-shadow:_-2px_-2px_0_black,_2px_-2px_0_black,_-2px_2px_0_black,_2px_2px_0_black]">
+											MusAIc
+										</span>
 									</Link>
-									<nav className="ml-auto flex gap-4 sm:gap-6 float-end">
-									</nav>
+									<nav className="ml-auto flex gap-4 sm:gap-6 float-end"></nav>
 
 									<div className="ml-4">
 										<HeaderAuth />
 									</div>
 								</header>
 							</div>
+
+							{/* Main Content */}
 							<div className="flex flex-col gap-20 max-w-5xl p-5">
 								{children}
 							</div>
 
+							{/* Footer Section */}
 							<footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
 								<p>
 									Powered by{" "}

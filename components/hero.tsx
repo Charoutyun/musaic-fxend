@@ -14,7 +14,7 @@ export default function Header() {
 										Discover Your Perfect Sound
 									</h1>
 									<p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-									MusAIc utilizes AI to figure out what you like and helps you discover fresh artists and songs you’re bound to enjoy.
+										MusAIc utilizes AI to figure out what you like and helps you discover fresh artists and songs you’re bound to enjoy.
 									</p>
 								</div>
 								<div className="space-x-4">
@@ -23,38 +23,38 @@ export default function Header() {
 							</div>
 						</div>
 					</section>
-					<section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800 rounded-xl border-2 shadow-md">
+					<section className="w-full py-12 md:py-24 lg:py-32 bg-black rounded-xl">
 						<div className="container px-4 md:px-6">
-							<h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">
+							<h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12 text-white">
 								Features
 							</h2>
 							<div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
 								<div className="flex flex-col items-center space-y-3 text-center">
-									<Music className="h-12 w-12 text-primary" />
-									<h3 className="text-xl font-bold">Personalized Playlists</h3>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
-										Curated playlists based on your listening history and
-										preferences.
+									<Music className="h-12 w-12 text-[#1ED760]" />
+									<h3 className="text-xl font-bold text-white">Personalized Playlists</h3>
+									<p className="text-sm text-gray-400">
+									Experience hand-curated playlists crafted to resonate with your unique listening habits and preferences, elevating your music journey.
 									</p>
 								</div>
 								<div className="flex flex-col items-center space-y-3 text-center">
-									<User className="h-12 w-12 text-primary" />
-									<h3 className="text-xl font-bold">Social Sharing</h3>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
-										Connect with friends and share your favorite tracks and
-										artists.
+									<User className="h-12 w-12 text-[#1ED760]" />
+									<h3 className="text-xl font-bold text-white">Social Sharing</h3>
+									<p className="text-sm text-gray-400">
+									Seamlessly connect with friends and share the music that moves you, fostering deeper connections through your favorite tracks and artists.
 									</p>
 								</div>
 								<div className="flex flex-col items-center space-y-3 text-center">
-									<Radio className="h-12 w-12 text-primary" />
-									<h3 className="text-xl font-bold">Intelligent</h3>
-									<p className="text-sm text-gray-500 dark:text-gray-400">
-										AI is used to suggest songs based on listening history or written descriptions.
+									<Radio className="h-12 w-12 text-[#1ED760]" />
+									<h3 className="text-xl font-bold text-white">Intelligent</h3>
+									<p className="text-sm text-gray-400">
+									Unlock AI-powered song recommendations tailored to your taste, inspired by your listening history and expressive descriptions.
 									</p>
 								</div>
 							</div>
 						</div>
 					</section>
+
+
 				</main>
 			</div>
 		</>
