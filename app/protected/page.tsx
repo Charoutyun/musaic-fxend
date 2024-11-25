@@ -4,15 +4,15 @@ import EnterButton from "@/components/EnterButton";
 import './page.css'; 
 
 export default async function ProtectedPage() {
-	const supabase = createClient();
+    const supabase = createClient();
 
-	const {
-		data: { user },
-	} = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
-	if (!user) {
-		return redirect("/sign-in");
-	}
+    if (!user) {
+        return redirect("/sign-in");
+    }
 
 	//Div elements and UI of /protected/
 	return (
