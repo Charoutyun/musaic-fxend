@@ -6,6 +6,8 @@ import axios from "axios";
 import Slider from "@/components/ui/Slider";
 import { SkipBack, SkipForward, Play, Pause, Volume2, Search, X } from "lucide-react";
 import debounce from "lodash.debounce";
+//import Sidebar from './ui/Sidebar';
+import QueueButton from "./QueueButton";
 
 interface SpotifyPlayerProps {
   accessToken: string;
@@ -503,6 +505,9 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
                       <p className="text-sm text-gray-400">
                         {track.artists.map((artist) => artist.name).join(", ")}
                       </p>
+                    </div>
+                    <div>
+                      <QueueButton trackUri={""} accessToken={""}></QueueButton>
                     </div>
                   </li>
                 ))}
