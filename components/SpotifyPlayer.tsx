@@ -1,4 +1,4 @@
-
+// components/SpotifyPlayer.tsx
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -356,7 +356,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
           <textarea
             value={chatInput}
             onChange={(e) => setChatInput(e.target.value)}
-            placeholder="Ask ChatGPT for song recommendations..."
+            placeholder="Ask Musaic for song recommendations..."
             className="w-full bg-gray-800 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             rows={4}
           ></textarea>
