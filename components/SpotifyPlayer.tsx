@@ -59,6 +59,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     uri: string;
   }>>([]);
 
+
   const skipToNext = async () => {
     if (queue.length === 0) {
       console.log("Queue is empty");
@@ -90,6 +91,16 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     } catch (error) {
       console.error("Error playing next track:", error);
     }
+  };
+
+  const addToQueue = (track: {
+    id: string;
+    name: string;
+    artists: Array<{ name: string }>;
+    album: { images: Array<{ url: string }> };
+    uri: string;
+  }) => {
+    setQueue((prevQueue) => [...prevQueue, track]);
   };
 
   const debouncedSearch = useCallback(
@@ -129,16 +140,6 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     }, 500),
     [accessToken]
   );
-
-  const addToQueue = (track: {
-    id: string;
-    name: string;
-    artists: Array<{ name: string }>;
-    album: { images: Array<{ url: string }> };
-    uri: string;
-  }) => {
-    setQueue((prevQueue) => [...prevQueue, track]);
-  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -298,21 +299,6 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     }
   };
 
-  /*
-  const skipToNext = async () => {
-    if (!player) {
-      console.error("Spotify Player is not initialized.");
-      return;
-    }
-
-    try {
-      await player.nextTrack();
-    } catch (error: unknown) {
-      console.error("Error skipping to next track:", error);
-      alert("Failed to skip to next track.");
-    }
-  };
-*/
   const skipToPrevious = async () => {
     if (!player) {
       console.error("Spotify Player is not initialized.");
@@ -401,7 +387,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   };
 
   return (
-    <div className="bg-black text-white p-8 rounded-lg max-w-6xl w-full mx-auto">
+    <div className="bg-black text-white p-8 rounded-lg max-w-6xl w-full mx-auto space-y-3.5">
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Ask for Song Recommendations</h2>
         <form onSubmit={handleChatSubmit} className="flex flex-col space-y-4">
@@ -489,7 +475,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
                         e.stopPropagation(); // Prevent triggering the track play event
                         addToQueue(track);
                       }}
-                      className="bg-green-500 text-white rounded p-2 ml-4"
+                      className="text-white bg-green-500 rounded p-2 ml-4 hover:scale-105 transition-transform shadow-lg"
                     >
                       Add to Queue
                     </button>
@@ -595,29 +581,33 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
           </button>
         </div>
       )}
+
       {/* Display queue */}
-      <div className="mt-6">
-        <h3 className="text-xl font-semibold mb-2">Queue:</h3>
-        <ul>
-          {queue.map((track, index) => (
-            <li key={track.id} className="flex items-center space-x-4 mb-2">
-              <img
-                src={track.album.images[2]?.url || "/placeholder.svg"}
-                alt={`${track.name} cover`}
-                className="w-12 h-12 rounded"
-              />
-              <div>
-                <p className="font-medium">{track.name}</p>
-                <p className="text-sm text-gray-400">
-                  {track.artists.map((artist) => artist.name).join(", ")}
-                </p>
-              </div>
-              {index === 0 && (
-                <span className="text-green-500">Up Next</span>
-              )}
-            </li>
-          ))}
-        </ul>
+      <div className="bg-gray-800 rounded-3xl p-5 ml-4">
+        <h3 className = "text-xl font-semibold mb-2">Queue:</h3>
+        <span className="text-sm align-text-top">Search a song to add to your playback queue.</span>
+        <div className="mt-6">
+          <ul>
+            {queue.map((track, index) => (
+              <li key={track.id} className="flex items-center space-x-4 mb-2 hover:bg-gray-700 p-2 rounded-md">
+                {index === 0 && (
+                  <span className="text-white font-semibold">Up Next</span>
+                )}
+                <img
+                  src={track.album.images[2]?.url || "/placeholder.svg"}
+                  alt={`${track.name} cover`}
+                  className="w-12 h-12 rounded"
+                />
+                <div>
+                  <p className="font-medium">{track.name}</p>
+                  <p className="text-sm text-gray-400">
+                    {track.artists.map((artist) => artist.name).join(", ")}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
