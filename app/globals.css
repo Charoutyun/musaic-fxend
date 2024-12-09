@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -64,8 +65,11 @@
 		@apply border-border;
 	}
 	body {
-		@apply bg-background text-foreground;
-	}
+		@apply text-foreground;
+		background-color: #434343;
+		min-height: 100vh;
+		margin: 0;
+	}	
 
 	h1 {
 		@apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;

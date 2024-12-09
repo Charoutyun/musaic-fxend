@@ -16,7 +16,8 @@ type OAuthButtonProps = {
 const OAuthButton = ({ formAction, children, className }: OAuthButtonProps) => {
   return (
     <form action={formAction}>
-      <Button type="submit" className={className}>
+      <Button type="submit" className={`flex items-center justify-center ${className}`}>
+        <SiSpotify className="mr-2" /> {/* Single Spotify logo with spacing */}
         {children}
       </Button>
     </form>
@@ -30,7 +31,6 @@ export const OAuthButtons = ({ actionType }: { actionType: "signUp" | "signIn" }
         formAction={signInWithSpotify}
         className="relative bg-[#1DB954] hover:bg-[#189a46] w-full"
       >
-        <SiSpotify className="absolute left-2" />
         Sign {actionType === "signIn" ? "in" : "up"} with Spotify
       </OAuthButton>
     </>

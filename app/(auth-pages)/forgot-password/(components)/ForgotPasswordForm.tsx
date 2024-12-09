@@ -19,9 +19,9 @@ export const ForgotPasswordForm = ({
 				<div>
 					<h1 className="">Reset Password</h1>
 				</div>
-				<div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-					<Label htmlFor="email">Email</Label>
-					<Input name="email" placeholder="you@example.com" required />
+				<div className="flex flex-col gap-2 [&>input]:mb-3 mt-0">
+					<Label htmlFor="email"></Label>
+					<Input name="email" placeholder="Email" required />
 					<div className="flex flex-row space-x-2 justify-end">
 						<Link
 							className={buttonVariants({ variant: "default" })}
