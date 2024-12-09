@@ -103,6 +103,19 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
     setQueue((prevQueue) => [...prevQueue, track]);
   };
 
+  const removeFromQueue = async (trackToRemove: {
+    id: string;
+    name: string;
+    artists: Array<{ name: string }>;
+    album: { images: Array<{ url: string }> };
+    uri: string;
+  }) => {
+    if (queue.length === 0) {
+      console.log("Queue is empty.");
+    }
+    setQueue((prevQueue) => prevQueue.filter((track) => track.id != trackToRemove.id));
+  }
+
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
       if (query.trim() === "") {
@@ -589,7 +602,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         <div className="mt-6">
           <ul>
             {queue.map((track, index) => (
-              <li key={track.id} className="flex items-center space-x-4 mb-2 hover:bg-gray-700 p-2 rounded-md">
+              <li key={track.id} className="flex items-center space-x-4 mb-2">
                 {index === 0 && (
                   <span className="text-white font-semibold">Up Next</span>
                 )}
@@ -604,6 +617,14 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
                     {track.artists.map((artist) => artist.name).join(", ")}
                   </p>
                 </div>
+                {index != 0 && (
+                  <button
+                  onClick={() => {removeFromQueue(track)}}
+                  className="text-white bg-red-500 rounded p-2 ml-4 hover:scale-105 transition-transform shadow-lg"
+                >
+                  Remove From Queue
+                </button>
+                )} 
               </li>
             ))}
           </ul>
