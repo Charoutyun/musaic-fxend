@@ -1,12 +1,22 @@
-import Link from "next/link";
-
 export const SignUpForm = ({
 	searchParams,
   }: {
-	searchParams: { success: string } | { error_description: string; error: string };
+	searchParams: { success?: string; error_description?: string; error?: string };
   }) => {
+	let message;
+  
+	if (searchParams.success) {
+	  message = <p className="text-center text-green-600">{searchParams.success}</p>;
+	} else if (searchParams.error_description || searchParams.error) {
+	  message = (
+		<p className="text-center text-red-600">
+		  {searchParams.error_description || searchParams.error}
+		</p>
+	  );
+	}
+  
 	return (
-	  <>
+		<>
 		<div className="flex flex-col gap-2 min-w-72 max-w-72">
         <div className="flex-1 flex flex-col min-w-64 space-y-2.5">
           <h1 className="text-center">Sign up</h1>
@@ -22,19 +32,11 @@ export const SignUpForm = ({
             >
               Go to Sign-Up Form
             </a>
-            <small>
-              Already have an account?{" "}
-              <Link
-                className="text-primary font-medium underline"
-                href="/sign-in"
-              >
-                Sign in
-              </Link>
-            </small>
           </div>
         </div>
       	</div>
 	  </>
 	);
   };
+  
   
