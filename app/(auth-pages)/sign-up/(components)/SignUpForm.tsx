@@ -13,31 +13,29 @@ export const SignUpForm = ({ searchParams }: { searchParams: Message }) => {
 		<>
 			<HashToSearch />
 			<div className="flex flex-col gap-2 min-w-72 max-w-72">
-				<form className="flex flex-col mx-auto w-full space-y-2.5">
-					<h1>Sign Up</h1>
-					<small>
-						Already have an account?{" "}
-						<Link
-							className="text-primary font-medium underline"
-							href="/sign-in"
-						>
-							Sign in
-						</Link>
-					</small>
+				<form className="flex-1 flex flex-col min-w-64 space-y-2.5">
+					<h1 className="text-center">Sign up</h1>
 					<div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-						<Label htmlFor="email">Email</Label>
-						<Input name="email" placeholder="hello@example.com" required />
-						<Label htmlFor="password">Password</Label>
+						<Label htmlFor="email"></Label>
+						<Input name="email" placeholder="Email" required />
+						<Label htmlFor="password"></Label>
 						<Input
 							type="password"
 							name="password"
-							placeholder="Your password"
+							placeholder="Password"
 							minLength={6}
 							required
 						/>
 						<SubmitButton formAction={signUpAction} pendingText="Signing up...">
 							Sign up
 						</SubmitButton>
+						<small>
+							Already have an account?{" "}
+							<Link
+								className="text-primary font-medium underline"
+								href="/sign-in">Sign in
+							</Link>
+						</small>
 						<FormMessage message={searchParams} />
 					</div>
 				</form>
