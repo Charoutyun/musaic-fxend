@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { HashToSearch } from "@/app/(components)/HashToSearch";
 
-export const SignUpForm = () => {
-  return (
-    <>
-      <HashToSearch />
-      <div className="flex flex-col gap-2 min-w-72 max-w-72">
+export const SignUpForm = ({
+	searchParams,
+  }: {
+	searchParams: { success: string } | { error_description: string; error: string };
+  }) => {
+	return (
+	  <>
+		<div className="flex flex-col gap-2 min-w-72 max-w-72">
         <div className="flex-1 flex flex-col min-w-64 space-y-2.5">
           <h1 className="text-center">Sign up</h1>
           <div className="flex flex-col gap-2 mt-8">
@@ -31,7 +34,8 @@ export const SignUpForm = () => {
             </small>
           </div>
         </div>
-      </div>
-    </>
-  );
-};
+      	</div>
+	  </>
+	);
+  };
+  
