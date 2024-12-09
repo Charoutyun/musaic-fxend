@@ -26,8 +26,8 @@ export const LogInForm = ({ searchParams }: { searchParams: Message }) => {
 							required
 						/>
 						<div className="flex justify-between items-center">
-							<Label 
-							htmlFor="password">
+							<Label
+								htmlFor="password">
 							</Label>
 						</div>
 						<Input
@@ -44,9 +44,18 @@ export const LogInForm = ({ searchParams }: { searchParams: Message }) => {
 							Forgot Password?
 						</Link>
 
-						<SubmitButton pendingText="Signing In..." formAction={signInAction} >
+						<SubmitButton
+							pendingText="Signing In..."
+							onClick={async (e) => {
+								e.preventDefault();
+								if (e.currentTarget.form) {
+									await signInAction(new FormData(e.currentTarget.form));
+								}
+							}}
+						>
 							Sign in
 						</SubmitButton>
+
 						<small>
 							Don't have an account?{" "}
 							<Link
