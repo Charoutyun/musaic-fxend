@@ -50,6 +50,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   const [chatResponse, setChatResponse] = useState<string>("");
   const [isChatLoading, setIsChatLoading] = useState<boolean>(false);
   const [chatError, setChatError] = useState<string | null>(null);
+  
 
   const [queue, setQueue] = useState<Array<{
     id: string;
@@ -86,7 +87,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         },
       });
 
-      // Remove the played song from the queue
+      // Remove the played song from the queue -- needs to keep the queue
       setQueue((prevQueue) => prevQueue.slice(1));
     } catch (error) {
       console.error("Error playing next track:", error);
@@ -102,6 +103,19 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
   }) => {
     setQueue((prevQueue) => [...prevQueue, track]);
   };
+
+  const removeFromQueue = async (trackToRemove: {
+    id: string;
+    name: string;
+    artists: Array<{ name: string }>;
+    album: { images: Array<{ url: string }> };
+    uri: string;
+  }) => {
+    if (queue.length === 0) {
+      console.log("Queue is empty.");
+    }
+    setQueue((prevQueue) => prevQueue.filter((track) => track.id != trackToRemove.id));
+  }
 
   const debouncedSearch = useCallback(
     debounce(async (query: string) => {
@@ -589,9 +603,17 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
         <div className="mt-6">
           <ul>
             {queue.map((track, index) => (
-              <li key={track.id} className="flex items-center space-x-4 mb-2 hover:bg-gray-700 p-2 rounded-md">
+              <li key={track.id} className="flex items-center space-x-4 mb-2 cursor-pointer hover:bg-gray-700 p-2 rounded-md">
                 {index === 0 && (
                   <span className="text-white font-semibold">Up Next</span>
+                )}
+                {index != 0 && (
+                  <button
+                  onClick={() => {removeFromQueue(track)}}
+                  className="text-white bg-red-500 rounded p-2 ml-4 hover:scale-105 transition-transform shadow-lg"
+                >
+                  Remove
+                </button>
                 )}
                 <img
                   src={track.album.images[2]?.url || "/placeholder.svg"}
@@ -603,7 +625,7 @@ const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({ accessToken }) => {
                   <p className="text-sm text-gray-400">
                     {track.artists.map((artist) => artist.name).join(", ")}
                   </p>
-                </div>
+                </div> 
               </li>
             ))}
           </ul>
