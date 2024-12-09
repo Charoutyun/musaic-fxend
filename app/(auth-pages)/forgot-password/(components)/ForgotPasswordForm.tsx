@@ -30,11 +30,17 @@ export const ForgotPasswordForm = ({
 							Back
 						</Link>
 						<SubmitButton
-							formAction={forgotPasswordAction}
+							onClick={async (e) => {
+								e.preventDefault();
+								if (e.currentTarget.form) {
+									await forgotPasswordAction(new FormData(e.currentTarget.form));
+								}
+							}}
 							className={buttonVariants({ variant: "destructive" })}
 						>
 							Reset Password
 						</SubmitButton>
+
 					</div>
 					<FormMessage message={searchParams} />
 				</div>
