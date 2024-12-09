@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { HashToSearch } from "@/app/(components)/HashToSearch";
 
 export const SignUpForm = ({
 	searchParams,
