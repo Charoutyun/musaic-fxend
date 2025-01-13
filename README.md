@@ -7,6 +7,7 @@ Musaic is an intelligent music recommendation web app built for a Senior Capston
 - Manasi Patil
 - Mar Jawaid
 
+
 # Usage
 
 Musaic is a Next.js app hosted via Vercel with a backend hosted by Supabase.
